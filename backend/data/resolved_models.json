@@ -1,0 +1,17 @@
+{
+  "toxicity": {
+    "model_id": "cardiffnlp/twitter-roberta-base-offensive",
+    "load_ms": 158811,
+    "infer_ms": 66
+  },
+  "ai_detection": {
+    "model_id": "openai-community/roberta-base-openai-detector",
+    "load_ms": 285743,
+    "infer_ms": 55
+  },
+  "embedding": {
+    "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+    "load_ms": 45122,
+    "infer_ms": 13
+  }
+}

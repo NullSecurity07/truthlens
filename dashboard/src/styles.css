@@ -1,0 +1,563 @@
+/* ============================================================================
+   TruthLens design system — "instrument readout, not dashboard"
+   ----------------------------------------------------------------------------
+   The product's job is to make a verdict legible and its evidence auditable.
+   Marketing polish reduces trust in a verification tool, so the register here is
+   a laboratory record: quiet surfaces, hairline structure, tabular figures, and
+   colour used only where it carries meaning.
+
+   Committed light theme. No dark variant — one controlled appearance.
+   ========================================================================== */
+
+/* --- self-hosted faces: the product promises it runs offline, so no CDN --- */
+@font-face {
+  font-family: "Public Sans";
+  src: url("/fonts/public-sans.woff2") format("woff2");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* surfaces */
+  --paper:      #fcfcfd;
+  --card:       #ffffff;
+  --sunken:     #f6f7f9;
+  --rule:       #e4e7ec;
+  --rule-soft:  #eef0f3;
+
+  /* ink */
+  --ink:        #10151f;
+  --graphite:   #5a6472;
+  --mist:      #667080;  /* 4.88:1 on paper (WCAG AA). #8a94a3 failed at 2.99:1 */
+
+  /* the one accent: anti-reflective lens coating */
+  --lens:       #0e6b70;
+  --lens-deep:  #0a5054;
+  --lens-wash:  #e6f2f2;
+
+  /* verdicts — small, precise marks. absence is grey on purpose. */
+  --false:      #b42318;
+  --mixed:      #b54708;
+  --true:       #067647;
+  --related:    #5925dc;
+  --none:       #667085;
+  --false-wash: #fef3f2;
+  --mixed-wash: #fffaeb;
+  --true-wash:  #ecfdf3;
+  --related-wash:#f4f3ff;
+  --none-wash:  #f2f4f7;
+
+  --sans: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Instrument Serif", ui-serif, Georgia, serif;
+  --mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Consolas, monospace;
+
+  --radius: 10px;
+  --gutter: clamp(20px, 5vw, 40px);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--lens); text-underline-offset: 2px; }
+a:hover { color: var(--lens-deep); }
+
+:focus-visible {
+  outline: 2px solid var(--lens);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ============================ layout ==================================== */
+
+.shell { max-width: 860px; margin: 0 auto; padding: 0 var(--gutter) 96px; }
+
+/* ---- masthead: the trust anchor sits here, above everything else ---- */
+.masthead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 22px 0 16px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 40px;
+}
+.wordmark {
+  font-family: var(--display);
+  font-size: 27px;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.wordmark .lens-mark {
+  width: 15px; height: 15px; border-radius: 50%;
+  border: 3.5px solid var(--lens);
+  flex: none;
+}
+.telemetry {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--graphite);
+}
+.telemetry b { font-weight: 600; color: var(--ink); }
+.telemetry .off { color: var(--false); }
+
+/* ============================ composer ================================== */
+
+.composer-title {
+  font-family: var(--display);
+  font-size: 38px;
+  line-height: 1.1;
+  font-weight: 400;
+  margin: 0 0 6px;
+  letter-spacing: -0.015em;
+}
+.composer-sub { color: var(--graphite); margin: 0 0 20px; max-width: 58ch; }
+
+.field {
+  width: 100%;
+  min-height: 110px;
+  resize: vertical;
+  padding: 14px 15px;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: inherit;
+  font: inherit;
+  line-height: 1.6;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.field::placeholder { color: var(--mist); }
+.field:hover { border-color: #d3d8e0; }
+.field:focus {
+  outline: none;
+  border-color: var(--lens);
+  box-shadow: 0 0 0 3px var(--lens-wash);
+}
+/* box-shadow is invisible in forced-colours mode, so keep a real outline there */
+@media (forced-colors: active) {
+  .field:focus { outline: 2px solid Highlight; outline-offset: 1px; }
+}
+
+.composer-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.btn {
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 9px 20px;
+  border: 1px solid var(--lens);
+  border-radius: 8px;
+  background: var(--lens);
+  color: #fff;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+}
+.btn:hover:not(:disabled) { background: var(--lens-deep); border-color: var(--lens-deep); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.hint { color: var(--mist); font-size: 13px; }
+.kbd {
+  font-family: var(--mono); font-size: 11px; background: var(--sunken);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 1px 5px; color: var(--graphite);
+}
+
+/* ============================ section rules ============================= */
+
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 44px 0 20px;
+}
+.section-rule::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--rule);
+}
+.section-label {
+  margin: 0;
+  font-weight: 400;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--mist);
+  white-space: nowrap;
+}
+
+/* ======================= THE SIGNATURE: evidence meter ================== */
+/*
+   Segment width = that engine's EFFECTIVE weight (base weight x its own
+   confidence). Whatever is left over is drawn hollow and labelled "unmeasured".
+   A score backed by little evidence therefore looks visibly different from the
+   same score backed by a lot — which is the honesty property this whole project
+   is built around, made visual instead of buried in a field.
+*/
+.verdict-block { margin-top: 4px; }
+
+.verdict-head { display: flex; align-items: baseline; gap: 20px; margin-bottom: 22px;
+                flex-wrap: wrap; }
+.score {
+  font-family: var(--display);
+  font-size: 84px;
+  line-height: .78;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.score-max { font-family: var(--sans); font-size: 16px; color: var(--mist); font-weight: 400; }
+.verdict-label { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; margin-bottom: 4px; }
+.verdict-note { color: var(--graphite); font-size: 13.5px; }
+
+.readout {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 24px 26px;
+}
+.meter {
+  display: flex;
+  height: 26px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: var(--sunken);
+  border: 1px solid var(--rule);
+}
+.meter-seg { transition: width .55s cubic-bezier(.22,.8,.28,1); }
+.meter-seg.lowers { background: var(--false); }
+.meter-seg.raises { background: var(--true); }
+.meter-seg.neutral { background: var(--none); }
+.meter-seg.unmeasured {
+  flex: 1;
+  background-image: repeating-linear-gradient(
+    -45deg, #fff 0 5px, #d7dce4 5px 7px);
+}
+.meter-caption {
+  margin-top: 11px;
+  font-size: 12.5px;
+  color: var(--graphite);
+  line-height: 1.5;
+  max-width: 62ch;
+}
+.meter-caption b { color: var(--ink); font-weight: 600; }
+@media (prefers-reduced-motion: reduce) {
+  .meter-seg { transition: none; }
+}
+
+.meter-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 20px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--graphite);
+}
+.meter-key-item { display: flex; align-items: center; gap: 6px; }
+.swatch { width: 11px; height: 11px; border-radius: 2px; flex: none; }
+.swatch.lowers { background: var(--false); }
+.swatch.raises { background: var(--true); }
+.swatch.neutral { background: var(--none); }
+.swatch.unmeasured { background-image: repeating-linear-gradient(-45deg, #fff 0 3px, #d7dce4 3px 5px);
+                border: 1px solid var(--rule); }
+.meter-key b { font-family: var(--mono); font-weight: 600; font-size: 11.5px; color: var(--ink); }
+
+/* ============================ claim records ============================= */
+
+.claims { list-style: none; margin: 0; padding: 0; }
+
+.claim {
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--card);
+  padding: 15px 17px;
+  margin-bottom: 10px;
+}
+.claim-head { display: flex; gap: 13px; align-items: flex-start; }
+.claim-text { flex: 1; font-size: 15px; line-height: 1.5; }
+
+/* verdict tag: always carries its WORD, never colour alone (colour-blind safe) */
+.tag {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 5px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.tag.false   { color: var(--false);   background: var(--false-wash);   border-color: #fecdca; }
+.tag.mixed   { color: var(--mixed);   background: var(--mixed-wash);   border-color: #fedf89; }
+.tag.true    { color: var(--true);    background: var(--true-wash);    border-color: #abefc6; }
+.tag.related { color: var(--related); background: var(--related-wash); border-color: #d9d6fe; }
+.tag.no_match{ color: var(--none);    background: var(--none-wash);    border-color: var(--rule); }
+
+/* evidence hangs off the claim on a rule — the line encodes derivation */
+.evidence {
+  margin: 12px 0 0;
+  padding: 2px 0 2px 15px;
+  border-left: 2px solid var(--rule);
+}
+.evidence-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--mist);
+  display: block;
+  margin-bottom: 4px;
+}
+.evidence-claim { font-size: 14.5px; line-height: 1.5; color: var(--ink); }
+.evidence-meta {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--graphite);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  align-items: center;
+}
+.evidence-meta .num { font-family: var(--mono); font-size: 11.5px; }
+
+.guard {
+  margin-top: 11px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--mixed-wash);
+  border: 1px solid #fedf89;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #93370d;
+}
+.guard-title {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  font-weight: 600;
+}
+.claim-note { margin-top: 10px; font-size: 13px; color: var(--graphite); line-height: 1.5; }
+
+/* disclosure */
+.reveal { margin-top: 10px; }
+.reveal > summary {
+  cursor: pointer;
+  font-size: 12.5px;
+  color: var(--lens);
+  list-style: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.reveal > summary::-webkit-details-marker { display: none; }
+.reveal > summary::before { content: "+"; font-family: var(--mono); font-size: 13px; }
+.reveal[open] > summary::before { content: "\2212"; }
+.reveal-body {
+  margin-top: 9px;
+  padding-left: 15px;
+  border-left: 2px solid var(--rule-soft);
+  font-size: 13px;
+  color: var(--graphite);
+}
+.reveal-body ul { margin: 0; padding-left: 16px; }
+.reveal-body li { margin-bottom: 4px; }
+
+/* ============================ method table ============================== */
+
+.method { border-top: 1px solid var(--rule-soft); }
+.method-row {
+  display: grid;
+  grid-template-columns: 108px 62px 1fr;
+  gap: 14px;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font-size: 13.5px;
+  align-items: baseline;
+}
+.method-factor { font-weight: 600; }
+.method-weight { font-family: var(--mono); font-size: 12px; color: var(--graphite); }
+.method-detail { color: var(--graphite); line-height: 1.55; }
+.dir { font-family: var(--mono); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; }
+.dir.lowers { color: var(--false); }
+.dir.raises { color: var(--true); }
+.dir.neutral { color: var(--mist); }
+
+/* ============================ ledger (history) ========================== */
+
+.ledger { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule-soft); }
+.ledger-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 46px 1fr auto;
+  gap: 15px;
+  align-items: center;
+  padding: 11px 4px;
+  border: 0;
+  border-bottom: 1px solid var(--rule-soft);
+  background: none;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: background .12s ease;
+}
+.ledger-row:hover { background: var(--sunken); }
+.ledger-score {
+  font-family: var(--mono);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.ledger-text {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+.ledger-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--mist);
+  white-space: nowrap;
+}
+.ledger-detail { padding: 6px 0 22px 61px; }
+
+/* ============================ stats strip =============================== */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+}
+.stat { padding: 14px 16px; border-right: 1px solid var(--rule-soft); }
+.stat:last-child { border-right: 0; }
+.stat-value { font-family: var(--display); font-size: 34px; line-height: 1.05; }
+.stat-label {
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--mist); margin-top: 3px;
+}
+
+/* ============================ states ==================================== */
+
+.notice {
+  padding: 14px 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--rule);
+  background: var(--card);
+  color: var(--graphite);
+  font-size: 14px;
+}
+.notice.alert { border-color: #fecdca; background: var(--false-wash); color: #912018; }
+.notice-title { display: block; font-weight: 700; color: inherit; margin-bottom: 3px; }
+
+.empty-state {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--mist);
+  border: 1px dashed var(--rule);
+  border-radius: var(--radius);
+  font-size: 14px;
+}
+
+.working { display: flex; align-items: center; gap: 11px; color: var(--graphite); font-size: 14px; }
+.pulse {
+  width: 9px; height: 9px; border-radius: 50%; background: var(--lens); flex: none;
+  animation: pulse 1.1s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: .25; transform: scale(.8); } 50% { opacity: 1; transform: scale(1); } }
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; opacity: .7; } }
+
+/* ============================ footer ==================================== */
+
+.colophon {
+  margin-top: 60px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  font-size: 12.5px;
+  color: var(--mist);
+  line-height: 1.7;
+}
+.colophon b { color: var(--graphite); font-weight: 600; }
+
+@media (max-width: 560px) {
+  .score { font-size: 56px; }
+  .composer-title { font-size: 30px; }
+  .method-row { grid-template-columns: 1fr; gap: 3px; }
+  .ledger-row { grid-template-columns: 40px 1fr; }
+  .ledger-meta { grid-column: 2; }
+  .ledger-detail { padding-left: 0; }
+}
+
+/* history overflow control — the record should never dominate the page */
+.more {
+  display: block; width: 100%; margin-top: 14px; padding: 10px;
+  font: inherit; font-size: 13px; color: var(--lens);
+  background: none; border: 1px dashed var(--rule); border-radius: 8px; cursor: pointer;
+}
+.more:hover { background: var(--sunken); }
+
+/* ---- live evidence: deliberately not styled like a published fact-check ---- */
+.live {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px dashed var(--rule);      /* dashed: provisional, unlike the solid evidence rule */
+  border-radius: 9px;
+  background: var(--sunken);
+}
+.live-head {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--graphite); margin-bottom: 7px;
+}
+.live-dot { width: 7px; height: 7px; border-radius: 50%; flex: none; }
+.live .evidence-claim { font-size: 14px; }
+.live-note { margin: 7px 0 0; font-size: 12px; color: var(--mist); line-height: 1.5; }
+.colophon code {
+  font-family: var(--mono); font-size: 11.5px; background: var(--sunken);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 1px 5px;
+}

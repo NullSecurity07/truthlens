@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+node_modules/
+dist/
+backend/data/truthlens.db
+backend/data/claims.jsonl
+backend/data/claims_emb.npy
+.playwright-mcp/
+.pytest_cache/
+*.bak*
+.run/
+*.prev
+.env
